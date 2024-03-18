@@ -1,0 +1,19 @@
+<head>
+  <style> body { margin: 0; } </style>
+  <script src="https://unpkg.com/3d-force-graph"></script>
+</head>
+
+<body>
+
+  <div id="3d-graph"></div>
+
+  <script>
+    const elem = document.getElementById('3d-graph');
+
+    const Graph = ForceGraph3D({ controlType: 'fly' })(elem).warmupTicks(100).cooldownTicks(0).nodeResolution(1)
+      .jsonUrl('./data10.json')
+      .nodeAutoColorBy('name')
+      .nodeLabel(node => `${node.name}`)
+      .onNodeClick(node => window.open(`https://ncatlab.org/nlab/show/${node.name}`, '_blank'));
+  </script>
+</body>
