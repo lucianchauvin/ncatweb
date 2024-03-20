@@ -5,15 +5,40 @@
 
 <body>
 
+            <!-- window.open(`https://ncatlab.org/nlab/show/${node.name}`, '_blank'); -->
   <div id="3d-graph"></div>
+  <script type="module">
+    import dataR from './dataAllReduced.json' assert { type: 'json' }; 
+    import data from './data0.json' assert { type: 'json' }; 
 
-  <script>
     const elem = document.getElementById('3d-graph');
 
     const Graph = ForceGraph3D({ controlType: 'fly' })(elem).warmupTicks(100).cooldownTicks(0).nodeResolution(1)
-      .jsonUrl('./data10.json')
+      .graphData(data)
       .nodeAutoColorBy('name')
       .nodeLabel(node => `${node.name}`)
-      .onNodeClick(node => window.open(`https://ncatlab.org/nlab/show/${node.name}`, '_blank'));
+        .onNodeClick(node => {
+            let newLinks = []
+            for(const e in dataR[node.id]){
+                let elm = dataR[node.id][e]
+                if (!data["nodes"].includes(elm)){
+                    data["nodes"].push({
+                        id : elm,
+                        name : elm,
+                        val : 10
+                    })
+                }
+                newLinks.push({
+                    source : node.id,
+                    target : elm
+                })
+            }
+            let newGrpah = {
+                nodes: data["nodes"],
+                links: newLinks
+            }
+            console.log(newGrpah)
+            Graph.graphData(newGrpah)
+        });
   </script>
 </body>
